@@ -10,7 +10,7 @@ type PostDetailProps = {
 };
 
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({ take: 6 });
 
   return posts.map((post) => ({
     id: post.id.toString(),
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 }
 
 export default async function PostDetail({ params }: PostDetailProps) {
-  const post = await prisma.post.findFirst({
+  const post = await prisma.post.findUnique({
     where: { id: Number(params.id) },
   });
 
