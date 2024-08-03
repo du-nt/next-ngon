@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { PropsWithChildren, useLayoutEffect } from "react";
+import { PropsWithChildren, Suspense, useLayoutEffect } from "react";
 
 import EmptyLayout from "@/components/templates/EmptyLayout";
 import useBoundStore from "@/store";
+import Spinner from "@/components/atoms/Spinner";
 
-export default function AuthRoute({ children }: PropsWithChildren) {
+const SessionProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isAuthenticated = useBoundStore((state) => state.isAuthenticated);
@@ -18,4 +19,12 @@ export default function AuthRoute({ children }: PropsWithChildren) {
   }, [from, isAuthenticated, router]);
 
   return <EmptyLayout>{children}</EmptyLayout>;
+};
+
+export default function AuthRoute({ children }: PropsWithChildren) {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <SessionProvider>{children}</SessionProvider>
+    </Suspense>
+  );
 }
