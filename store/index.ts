@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import createUserSlice, { UserState } from "./useSlice";
+import createUserSlice, { UserState } from "./userSlice";
 import createThemeSlice, { ThemeState } from "./themeSlice";
 
 type BoundState = UserState & ThemeState;

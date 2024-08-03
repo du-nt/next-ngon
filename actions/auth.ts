@@ -76,11 +76,3 @@ export async function login(formData: FormData) {
     path: "/",
   });
 }
-
-export async function logout() {
-  // check if user is authenticated
-  console.log("xxxxxxxxx");
-  cookies().delete("access_token");
-  cookies().delete("refresh_token");
-  console.log("first");
-}

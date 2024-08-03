@@ -1,15 +1,16 @@
 "use server";
 
 import prisma from "@/libs/db";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function createPost(formData: FormData) {
   const title = formData.get("title");
   const content = formData.get("content");
   const image = formData.get("image");
+  const price = formData.get("price");
 
   // Validation
-  if (!title || !content || !image) {
+  if (!title || !content || !image || !price) {
     throw new Error("Title and content are required");
   }
 
@@ -19,8 +20,9 @@ export async function createPost(formData: FormData) {
       content: content.toString(),
       image: image.toString(),
       authorId: 1,
+      price: Number(price),
     },
   });
 
-  revalidatePath("/posts");
+  revalidateTag("posts");
 }

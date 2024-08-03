@@ -50,7 +50,15 @@ export default function RegisterPage() {
   return (
     <Container maxWidth="xs">
       <Spinner>
-        <Box className="flex justify-center flex-col items-center mt-16">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: 8,
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>

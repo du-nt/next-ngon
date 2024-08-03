@@ -32,9 +32,9 @@ export default function CreatePostForm() {
         label="Title"
         {...register("title")}
         autoFocus
-        error={!!errors.email}
+        error={!!errors.title}
         helperText={
-          errors.email?.message ? errors.email.message.toString() : undefined
+          errors.title?.message ? errors.title.message.toString() : undefined
         }
       />
       <TextField
@@ -43,13 +43,26 @@ export default function CreatePostForm() {
         fullWidth
         {...register("content")}
         label="Content"
-        error={!!errors.password}
+        error={!!errors.content}
         helperText={
-          errors.password?.message
-            ? errors.password.message.toString()
+          errors.content?.message
+            ? errors.content.message.toString()
             : undefined
         }
       />
+
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        {...register("price")}
+        label="Price"
+        error={!!errors.price}
+        helperText={
+          errors.price?.message ? errors.price.message.toString() : undefined
+        }
+      />
+
       <Button
         color="primary"
         variant="outlined"
@@ -59,12 +72,22 @@ export default function CreatePostForm() {
         Random a photo
       </Button>
 
-      <input {...register("image")} className="hidden" />
+      <TextField {...register("image")} sx={{ display: "none" }} />
 
-      <Box className="bg-[#eee] mt-6 w-[300px] h-[300px] rounded">
+      <Box
+        sx={{
+          backgroundColor: "#eee",
+          mt: 2,
+          width: 300,
+          height: 300,
+          borderRadius: 2,
+        }}
+      >
         {imageUrl && (
           <Image
-            className="rounded"
+            style={{
+              borderRadius: 8,
+            }}
             width={300}
             height={300}
             src={imageUrl}

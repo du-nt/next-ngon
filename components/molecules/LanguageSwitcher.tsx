@@ -32,7 +32,6 @@ export default function LanguageSwitcher() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className="!mr-4"
         startIcon={<LanguageIcon />}
       >
         Language

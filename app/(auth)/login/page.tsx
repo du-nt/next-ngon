@@ -21,19 +21,17 @@ import { useSearchParams } from "next/navigation";
 import Spinner from "@/components/atoms/Spinner";
 import { login } from "@/actions/auth";
 import useBoundStore from "@/store";
-import { useCustomQuery } from "@/hooks/useCustomQuery";
+import { useQueryWithCb } from "@/hooks/useCustomQuery";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const a = useBoundStore((state) => state.login);
-  const { refetch } = useCustomQuery(["api/user/me"], {
-    refetchOnMount: false,
-  });
+  const authenticate = useBoundStore((state) => state.authenticate);
+  const { refetch } = useQueryWithCb({ queryKey: ["user/me"], enabled: false });
+
   const searchParams = useSearchParams();
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -51,14 +49,22 @@ export default function LoginPage() {
 
   const handleLogin = async (formData: FormData) => {
     await login(formData);
-    refetch();
-    a();
+    await refetch();
+    authenticate();
   };
 
   return (
     <Container maxWidth="xs">
       <Spinner>
-        <Box className="flex justify-center flex-col items-center mt-16">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: 8,
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -118,6 +124,7 @@ export default function LoginPage() {
           >
             Login
           </Button>
+
           <Grid container>
             <Grid item xs>
               <Link

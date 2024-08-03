@@ -1,19 +1,19 @@
 "use client";
 
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren, useLayoutEffect } from "react";
 
-import EmptyLayout from "@/components/templates/EmptyLayout";
+import DefaultLayout from "@/components/templates/DefaultLayout";
 import useBoundStore from "@/store";
 
 export default function ProtectRoute({ children }: PropsWithChildren) {
+  const router = useRouter();
+  const pathname = usePathname();
   const isAuthenticated = useBoundStore((state) => state.isAuthenticated);
 
-  const pathname = usePathname();
-
   useLayoutEffect(() => {
-    !isAuthenticated && redirect(`/login?from=${pathname}`);
-  }, [isAuthenticated, pathname]);
+    !isAuthenticated && router.replace(`/login?from=${pathname}`);
+  }, [isAuthenticated, pathname, router]);
 
-  return <EmptyLayout>{children}</EmptyLayout>;
+  return <DefaultLayout>{children}</DefaultLayout>;
 }

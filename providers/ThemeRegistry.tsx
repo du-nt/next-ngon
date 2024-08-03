@@ -2,29 +2,34 @@
 
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
+import { CssVarsProvider } from "@mui/material/styles";
 import { PropsWithChildren } from "react";
 
-import { lightTheme } from "@/libs/theme";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 
+import SnackbarCloseButton from "@/components/atoms/SnackbarCloseButton";
+import { useQueryWithCb } from "@/hooks/useCustomQuery";
+import { theme } from "@/libs/theme";
+import useBoundStore from "@/store";
 import "dayjs/locale/ja";
 import { SnackbarKey, SnackbarProvider } from "notistack";
-import SnackbarCloseButton from "@/components/atoms/SnackbarCloseButton";
-import { useCustomQuery } from "@/hooks/useCustomQuery";
-import useBoundStore from "@/store";
 
 export default function ThemeRegistry({ children }: PropsWithChildren) {
-  const login = useBoundStore((state) => state.login);
-  useCustomQuery(["api/user/me"], { onSuccess: login });
+  const authenticate = useBoundStore((state) => state.authenticate);
+
+  useQueryWithCb({
+    queryKey: ["user/me"],
+    onSuccess: authenticate,
+    retry: 0,
+  });
 
   const snackbarAction = (snackbarKey: SnackbarKey) => (
     <SnackbarCloseButton snackbarKey={snackbarKey} />
   );
 
   return (
-    <ThemeProvider theme={lightTheme}>
+    <CssVarsProvider theme={theme}>
       <CssBaseline />
 
       <SnackbarProvider
@@ -41,6 +46,6 @@ export default function ThemeRegistry({ children }: PropsWithChildren) {
           <Container maxWidth="xl">{children}</Container>
         </LocalizationProvider>
       </SnackbarProvider>
-    </ThemeProvider>
+    </CssVarsProvider>
   );
 }

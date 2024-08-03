@@ -1,8 +1,8 @@
-import { queryClient } from "@/providers/RootProvider";
+import { getQueryClient } from "@/providers/RootProvider";
 import useBoundStore from "@/store";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || "";
+const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || "/api/";
 
 let refreshTokenRequest: null | Promise<void> = null;
 
@@ -18,12 +18,14 @@ const axiosInstance = axios.create({
 
 const refresh = async (): Promise<void> => {
   try {
-    await axiosInstance.get("api/auth/refresh");
+    await axios.get("/api/auth/refresh");
   } catch (error: unknown) {
     refreshTokenRequest = null;
 
     if (error instanceof AxiosError && error.response?.status === 401) {
-      useBoundStore.getState().logout();
+      useBoundStore.getState().unAuthenticate();
+
+      const queryClient = getQueryClient();
       queryClient.removeQueries();
     }
 

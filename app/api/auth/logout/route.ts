@@ -4,13 +4,17 @@ export async function GET() {
   const accessToken = cookies().get("access_token")?.value;
 
   if (!accessToken) {
+    cookies().delete("access_token");
+    cookies().delete("refresh_token");
+
     return new Response(null, { status: 401 });
   }
 
+  cookies().delete("access_token");
+  cookies().delete("refresh_token");
+
   const user = {
-    id: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
+    success: true,
   };
 
   return Response.json(user);

@@ -1,7 +1,32 @@
 import prisma from "@/libs/db";
+import { Prisma } from "@prisma/client";
 
-export default async function getPosts() {
-  const posts = await prisma.post.findMany();
+type QueryFilters = {
+  page?: string;
+  perPage?: string;
+};
 
-  return posts;
+export default async function getPosts(filters: QueryFilters = {}) {
+  const { page, perPage } = filters;
+
+  const limit = perPage ? Number(perPage) : 5;
+  const skip = Number(page) * (limit || 0) || 0;
+
+  const [posts, count] = await prisma.$transaction([
+    prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: limit,
+    }),
+    prisma.post.count(),
+  ]);
+
+  return {
+    pagination: {
+      total: count,
+    },
+    data: posts,
+  };
 }

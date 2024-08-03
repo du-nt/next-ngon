@@ -1,41 +1,40 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Skeleton, Toolbar, Typography } from "@mui/material";
 
-import ThemeSwitch from "@/components/atoms/ThemeSwitch";
 import LanguageSwitcher from "@/components/molecules/LanguageSwitcher";
 import dynamic from "next/dynamic";
+import NextLink from "next/link";
 const AAA = dynamic(() => import("../molecules/AAA"), {
   ssr: false,
-  loading: () => <Button color="inherit">Loading</Button>,
+  loading: () => <Skeleton width={78} height={38} variant="rounded" />,
 });
 
 export default function Header() {
   return (
-    <Toolbar className="!px-3 tablet:!px-6">
-      <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+    <Toolbar>
+      <IconButton
+        aria-label="delete"
+        size="large"
+        edge="start"
+        color="inherit"
+        sx={{ mr: 2 }}
+      >
         <MenuIcon />
       </IconButton>
 
-      <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+      <Typography
+        href="/"
+        variant="h6"
+        noWrap
+        component={NextLink}
+        sx={{ flexGrow: 1, textDecoration: "none" }}
+        color="inherit"
+      >
         MUI
       </Typography>
 
-      <Box className="flex items-center">
+      <Box sx={{ display: "flex", alignItems: "center", columnGap: 2 }}>
         <LanguageSwitcher />
-
-        <FormControlLabel
-          className="select-none"
-          control={<ThemeSwitch checked={true} />}
-          label="Mode"
-        />
-
         <AAA />
       </Box>
     </Toolbar>

@@ -1,43 +1,9 @@
-import { createTheme } from "@mui/material/styles";
+import { extendTheme } from "@mui/material/styles";
 
-import "@mui/material";
-
-const commonThemeOptions = {
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      tablet: 780,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
+export const theme = extendTheme({
+  colorSchemes: {
+    light: true,
+    dark: true,
   },
-  mixins: {
-    toolbar: {
-      minHeight: 56,
-      "@media (min-width: 0px)": {
-        minHeight: 56,
-      },
-      "@media (min-width: 600px)": {
-        minHeight: 56,
-      },
-      "@media (min-width: 780px)": {
-        minHeight: 64,
-      },
-    },
-  },
-};
-
-const lightTheme = createTheme({
-  ...commonThemeOptions,
+  colorSchemeSelector: "class",
 });
-
-const darkTheme = createTheme({
-  ...commonThemeOptions,
-  palette: {
-    mode: "dark",
-  },
-});
-
-export { lightTheme, darkTheme };

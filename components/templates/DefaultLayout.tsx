@@ -3,7 +3,6 @@ import { AppBar, Box, Toolbar } from "@mui/material";
 
 import Footer from "@/components/organisms/Footer";
 import Header from "@/components/organisms/Header";
-import cn from "@/libs/cn";
 
 export default function DefaultLayout({ children }: PropsWithChildren) {
   return (
@@ -22,7 +21,7 @@ export default function DefaultLayout({ children }: PropsWithChildren) {
         <Box component="main" className="grow">
           <Toolbar />
 
-          <Box className={cn("bg-red-100")}>{children}</Box>
+          <Box>{children}</Box>
 
           <AppBar position="static" color="secondary">
             <Toolbar variant="dense">

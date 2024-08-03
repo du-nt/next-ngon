@@ -2,17 +2,14 @@ import { PropsWithChildren } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import cn from "@/libs/cn";
-
-type Props = PropsWithChildren & {
+type SpinnerProps = PropsWithChildren & {
   spinning?: boolean;
-  className?: string;
 };
 
-export default function Spinner({ children, className, spinning }: Props) {
+export default function Spinner({ children, spinning }: SpinnerProps) {
   if (children)
     return (
-      <Box className={cn("relative", className)}>
+      <Box>
         {spinning && (
           <Box
             sx={{ backgroundColor: "background.paper" }}
@@ -27,12 +24,7 @@ export default function Spinner({ children, className, spinning }: Props) {
     );
 
   return (
-    <Box
-      className={cn(
-        "fixed top-0 bottom-0 left-0 right-0 flex justify-center items-center z-50",
-        className
-      )}
-    >
+    <Box>
       <CircularProgress />
     </Box>
   );

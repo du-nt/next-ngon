@@ -1,5 +1,7 @@
 import axiosInstance from "@/libs/axios_instance";
 import {
+  DefaultError,
+  QueryClient,
   QueryFunction,
   QueryFunctionContext,
   QueryKey,
@@ -9,35 +11,49 @@ import {
 } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 
-export function useCustomQuery<
+export function useQueryWithCb<
   TQueryFnData = unknown,
-  TError = unknown,
+  TError = DefaultError,
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey
 >(
-  queryKey: TQueryKey,
-  options?: Omit<
-    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-    "queryKey" | "initialData"
-  > & { initialData?: () => undefined } & { config?: AxiosRequestConfig }
+  options: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
+    config?: AxiosRequestConfig;
+    onSuccess?: (data: TQueryFnData) => void;
+    onError?: (error: unknown) => void;
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> {
-  const { config, ...restOptions } = options || {};
+  const { config, queryKey, queryFn, onSuccess, onError, ...restOptions } =
+    options;
 
-  const defaultQueryFn: QueryFunction<TQueryFnData, TQueryKey> = ({
+  const defaultQueryFn: QueryFunction<TQueryFnData, TQueryKey> = async ({
     queryKey,
-  }: QueryFunctionContext) => {
-    const url = queryKey?.[0];
+  }: QueryFunctionContext): Promise<TQueryFnData> => {
+    try {
+      const url = `${queryKey?.[0]}`;
 
-    if (typeof url === "string") {
-      return axiosInstance(url, { ...config, method: config?.method || "GET" });
+      const data = await axiosInstance<TError, TQueryFnData>(url, {
+        ...config,
+        method: config?.method || "GET",
+      });
+
+      onSuccess && onSuccess(data);
+
+      return data;
+    } catch (error) {
+      onError && onError(error);
+
+      throw error;
     }
-
-    throw new Error("Invalid URL");
   };
 
-  return useQuery({
-    queryKey,
-    queryFn: defaultQueryFn,
-    ...restOptions,
-  });
+  return useQuery(
+    {
+      queryKey,
+      queryFn: queryFn || defaultQueryFn,
+      ...restOptions,
+    },
+    queryClient
+  );
 }

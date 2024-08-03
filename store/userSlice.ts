@@ -2,14 +2,14 @@ import { StateCreator } from "zustand";
 
 export type UserState = {
   isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+  authenticate: () => void;
+  unAuthenticate: () => void;
 };
 
 const createUserSlice: StateCreator<UserState> = (set) => ({
   isAuthenticated: false,
-  login: () => set({ isAuthenticated: true }),
-  logout: () => set({ isAuthenticated: false }),
+  authenticate: () => set({ isAuthenticated: true }),
+  unAuthenticate: () => set({ isAuthenticated: false }),
 });
 
 export default createUserSlice;
