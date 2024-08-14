@@ -17,9 +17,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/login?from=${from}`, request.url));
   }
 
+  if (/^\/api/.test(request.nextUrl.pathname)) {
+    const newResponse = NextResponse.next();
+
+    newResponse.headers.set("Authorization", `Bearer ${token}`);
+
+    return newResponse;
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
