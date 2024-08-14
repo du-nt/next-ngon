@@ -30,3 +30,11 @@ export default async function getPosts(filters: QueryFilters = {}) {
     data: posts,
   };
 }
+
+export async function getPost(id: string) {
+  const post = prisma.post.findUnique({
+    where: { id: Number(id) },
+  });
+
+  return post;
+}

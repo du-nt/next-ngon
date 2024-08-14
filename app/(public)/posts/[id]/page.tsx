@@ -1,4 +1,5 @@
 import prisma from "@/libs/db";
+import { getPost } from "@/queries";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { notFound } from "next/navigation";
@@ -10,7 +11,7 @@ type PostDetailProps = {
 };
 
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({ take: 6 });
+  const posts = await prisma.post.findMany({ take: 4 });
 
   return posts.map((post) => ({
     id: post.id.toString(),
@@ -18,9 +19,7 @@ export async function generateStaticParams() {
 }
 
 export default async function PostDetail({ params }: PostDetailProps) {
-  const post = await prisma.post.findUnique({
-    where: { id: Number(params.id) },
-  });
+  const post = await getPost(params.id);
 
   if (!post) {
     notFound();

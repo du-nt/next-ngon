@@ -9,7 +9,19 @@ export default function Home() {
           About
         </Button>
         <Button variant="contained" LinkComponent={NextLink} href="/posts">
-          Posts
+          Posts(SSG)
+        </Button>
+
+        <Button variant="contained" LinkComponent={NextLink} href="/posts-isr">
+          Posts(ISR)
+        </Button>
+
+        <Button variant="contained" LinkComponent={NextLink} href="/posts-isr">
+          Posts(SSR)
+        </Button>
+
+        <Button variant="contained" LinkComponent={NextLink} href="/todos">
+          Todos(SSG + CSR)
         </Button>
 
         <Button
