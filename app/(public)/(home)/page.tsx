@@ -16,7 +16,7 @@ export default function Home() {
           Posts(ISR)
         </Button>
 
-        <Button variant="contained" LinkComponent={NextLink} href="/posts-isr">
+        <Button variant="contained" LinkComponent={NextLink} href="/posts-ssr">
           Posts(SSR)
         </Button>
 
